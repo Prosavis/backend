@@ -1,0 +1,19 @@
+.env
+serviceAccountKey.json
+
+# Dependencias
+node_modules/
+
+# Build y cobertura
+dist/
+coverage/
+
+# Configuración de IDEs y sistema
+.vscode/
+.idea/
+.DS_Store
+
+# Archivos temporales
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

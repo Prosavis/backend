@@ -1,8 +1,13 @@
-const express = require('express');
-const cors = require('cors');
-require('dotenv').config();
+import express from 'express';
+import cors from "cors";
+import dotenv from 'dotenv';
+import { Request, Response, NextFunction } from 'express';
+import userRoutes from './routes/user.route';
 
 const app = express();
+
+dotenv.config();
+
 const PORT = process.env.PORT || 3000;
 
 // Middleware
@@ -10,16 +15,10 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Rutas básicas
-app.get('/', (req, res) => {
-  res.json({
-    message: 'Servidor Express funcionando correctamente',
-    timestamp: new Date().toISOString(),
-    version: '1.0.0'
-  });
-});
+// Rutas
+app.use('/api', userRoutes);
 
-app.get('/api/health', (req, res) => {
+app.get('/api/health', (req: Request, res: Response) => {
   res.json({
     status: 'OK',
     uptime: process.uptime(),
@@ -28,7 +27,7 @@ app.get('/api/health', (req, res) => {
 });
 
 // Manejo de errores 404
-app.use((req, res) => {
+app.use((req: Request, res: Response) => {
   res.status(404).json({
     error: 'Ruta no encontrada',
     path: req.originalUrl
@@ -36,7 +35,7 @@ app.use((req, res) => {
 });
 
 // Manejo de errores globales
-app.use((err, req, res, next) => {
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   console.error(err.stack);
   res.status(500).json({
     error: 'Error interno del servidor',
@@ -45,10 +44,7 @@ app.use((err, req, res, next) => {
 });
 
 // Iniciar servidor
-app.listen(PORT, () => {
-  console.log(`🚀 Servidor corriendo en puerto ${PORT}`);
-  console.log(`📍 URL: http://localhost:${PORT}`);
-  console.log(`🏥 Health check: http://localhost:${PORT}/api/health`);
-});
+app.listen(PORT);
+console.log(`Application starting...`);
 
 module.exports = app;
